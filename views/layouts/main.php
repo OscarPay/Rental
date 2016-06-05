@@ -9,6 +9,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use app\models\Person;
+use yii\bootstrap\Alert;
 
 AppAsset::register($this);
 ?>
@@ -46,7 +47,7 @@ AppAsset::register($this);
 
         if(Yii::$app->user->identity->tipo === Person::ADMINISTRADOR){
             array_push($elementosNav,  ['label' => 'Automóviles', 'url' => "#"]);
-            array_push($elementosNav,  ['label' => 'Vendedores', 'url' => "#"]);
+            array_push($elementosNav,  ['label' => 'Vendedores', 'url' => ['/person/index-vendedores']]);
         }
 
         if(Yii::$app->user->identity->tipo === Person::VENDEDOR){
@@ -81,6 +82,18 @@ AppAsset::register($this);
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
+
+        <?php
+        foreach (Yii::$app->getSession ()->getAllFlashes () as $key => $message) {
+            echo Alert::widget ([
+                'options' => [
+                    'class' => 'alert-' . $key,
+                ],
+                'body' => $message,
+            ]);
+        }
+        ?>
+
         <?= $content ?>
     </div>
 </div>

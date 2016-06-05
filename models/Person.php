@@ -42,8 +42,9 @@ class Person extends \yii\db\ActiveRecord implements IdentityInterface {
      */
     public function rules() {
         return [
-            [['nombre', 'apellido', 'password', 'celular', 'email', 'tipo'], 'required'],
-            [['celular'], 'integer'],
+            [['nombre', 'apellido', 'password', 'celular', 'email', 'tipo'], 'required', 'message' => 'No puede estar vacío'],
+            [['email'], 'email', 'message' => 'Debe ser un email válido'],
+            [['celular'], 'integer', 'message' => 'Debe ser un número entero'],
             [['nombre', 'apellido', 'email', 'tipo', 'num_licencia', 'num_cuenta', 'banco', 'cuenta', 'cod_seguridad', 'vencimiento', 'licencia'], 'string', 'max' => 255],
         ];
     }
