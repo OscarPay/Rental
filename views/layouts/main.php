@@ -52,7 +52,7 @@ AppAsset::register($this);
 
         if(Yii::$app->user->identity->tipo === Person::VENDEDOR){
             array_push($elementosNav,  ['label' => 'Automóviles', 'url' => "#"]);
-            array_push($elementosNav,  ['label' => 'Clientes', 'url' => "#"]);
+            array_push($elementosNav,  ['label' => 'Clientes', 'url' => ['/person/index-clientes']]);
         }
 
         if(Yii::$app->user->identity->tipo === Person::CLIENTE){

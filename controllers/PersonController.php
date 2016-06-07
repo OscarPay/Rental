@@ -77,76 +77,54 @@ class PersonController extends Controller {
         return $this->redirect(['index-vendedores']);
     }
 
-    /**
-     * Lists all Person models.
-     * @return mixed
-     */
-    public function actionIndex() {
-        $searchModel = new PersonSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    ///////////// Cliente ///////////////////
 
-        return $this->render('index', [
+    public function actionIndexClientes() {
+        $searchModel = new PersonSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, Person::CLIENTE);
+
+        return $this->render('index-clientes', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
-    /**
-     * Displays a single Person model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id) {
-        return $this->render('view', [
+    public function actionViewCliente($id) {
+        return $this->render('view-cliente', [
             'model' => $this->findModel($id),
         ]);
     }
 
-    /**
-     * Creates a new Person model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate() {
+    public function actionCreateCliente() {
         $model = new Person();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            Yii::$app->getSession ()->setFlash ('success', 'El cliente se ha creado exitosamente');
+            return $this->redirect(['view-cliente', 'id' => $model->id]);
         } else {
-            return $this->render('create', [
+            return $this->render('create-cliente', [
                 'model' => $model,
             ]);
         }
     }
 
-    /**
-     * Updates an existing Person model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id) {
+    public function actionUpdateCliente($id) {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            Yii::$app->getSession ()->setFlash ('success', 'El cliente se ha actualizado exitosamente');
+            return $this->redirect(['view-cliente', 'id' => $model->id]);
         } else {
-            return $this->render('update', [
+            return $this->render('update-cliente', [
                 'model' => $model,
             ]);
         }
     }
 
-    /**
-     * Deletes an existing Person model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id) {
+    public function actionDeleteCliente($id) {
         $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        Yii::$app->getSession ()->setFlash ('success', 'El cliente se ha eliminado exitosamente');
+        return $this->redirect(['index-clientes']);
     }
 
     /**
