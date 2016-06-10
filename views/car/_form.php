@@ -23,8 +23,7 @@ use kartik\file\FileInput;
 
             <?= $form->field($model, 'marca')->textInput(['maxlength' => true]) ?>
 
-            <?= $form->field($model, 'placas')->textInput(['maxlength' => true]) ?>
-
+            <?= $form->field($model, 'precio') ?>
         </div>
 
         <div class="col-lg-6">
@@ -44,6 +43,9 @@ use kartik\file\FileInput;
     <div class="row">
 
         <div class="col-lg-12">
+
+            <?= $form->field($model, 'placas')->textInput(['maxlength' => true]) ?>
+
             <?= $form->field($model, 'imagen')->widget(FileInput::className(), [
                 'options'=>['accept'=>'image/*'],
                 'pluginOptions'=>[

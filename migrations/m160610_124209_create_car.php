@@ -23,6 +23,7 @@ class m160610_124209_create_car extends Migration
             'poliza' => $this->string()->notNull(),
             'num_serie' => $this->string()->notNull(),
             'num_pasajeros' => $this->string()->notNull(),
+            'precio' => $this->float(2)->notNull(),
             'descripcion' => $this->text()->notNull(),
         ]);
     }

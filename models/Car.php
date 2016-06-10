@@ -34,8 +34,10 @@ class Car extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['imagen', 'transmision', 'modelo', 'marca', 'placas', 'tipo', 'poliza', 'num_serie', 'num_pasajeros', 'descripcion'], 'required'],
+            [['imagen', 'transmision', 'precio', 'modelo', 'marca', 'placas', 'tipo', 'poliza', 'num_serie',
+                'num_pasajeros', 'descripcion'], 'required', 'message' => 'No puede estar vacío'],
             [['descripcion'], 'string'],
+            [['precio'], 'number', 'message' => 'Debe ser un número'],
             [['imagen'], 'safe'],
             [['imagen'], 'file', 'extensions' => 'jpg, gif, png'],
             [['imagen', 'transmision', 'modelo', 'marca', 'placas', 'tipo', 'poliza', 'num_serie', 'num_pasajeros'], 'string', 'max' => 255],
