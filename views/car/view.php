@@ -9,6 +9,8 @@ use yii\widgets\DetailView;
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Cars', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$title = $model->marca
 ?>
 <div class="car-view">
 
@@ -25,14 +27,21 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
+    <div class="text-center">
+        <?= Html::img($model->getImageUrl(), [
+            'class'=>'img-thumbnail',
+            'alt'=>$title,
+            'title'=>$title
+        ]); ?>
+    </div>
 
-    <?= Html::img(Yii::$app->params['uploadPath'] . $model->imagen);?>
+
+
+    <br><br>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'imagen',
             'transmision',
             'modelo',
             'marca',

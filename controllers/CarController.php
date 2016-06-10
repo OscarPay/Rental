@@ -62,27 +62,15 @@ class CarController extends Controller {
         $model = new Car();
 
         if ($model->load(Yii::$app->request->post())) {
-
-            // get the uploaded file instance. for multiple file uploads
-            // the following data will return an array
-            $image = UploadedFile::getInstance($model, 'imagen');
-
-            // store the source file name
-            $ext = array_pop(explode(".", $image->name));
-
-            // generate a unique file name
-            $model->imagen = Yii::$app->security->generateRandomString().".{$ext}";
-
-            if (!file_exists(Yii::$app->params['uploadPath'])) {
-                mkdir(Yii::$app->params['uploadPath'], 0777, true);
-            }
-
-            // the path to save file, you can set an uploadPath
-            // in Yii::$app->params (as used in example below)
-            $path = Yii::$app->params['uploadPath'] . $model->imagen;
+            // process uploaded image file instance
+            $image = $model->uploadImage();
 
             if($model->save()){
-                $image->saveAs($path);
+                // upload only if valid uploaded file instance found
+                if ($image !== false) {
+                    $path = $model->getImageFile();
+                    $image->saveAs($path);
+                }
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 return $this->redirect(['index']);
@@ -103,9 +91,29 @@ class CarController extends Controller {
      */
     public function actionUpdate($id) {
         $model = $this->findModel($id);
+        $oldFile = $model->getImageFile();
+        $oldImagen = $model->imagen;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            // process uploaded image file instance
+            $image = $model->uploadImage();
+
+            // revert back if no valid file instance uploaded
+            if ($image === false) {
+                $model->imagen = $oldImagen;
+            }
+
+            if($model->save()){
+                // upload only if valid uploaded file instance found
+                if ($image !== false && unlink($oldFile)) { // delete old and overwrite
+                    $path = $model->getImageFile();
+                    $image->saveAs($path);
+                }
+                return $this->redirect(['view', 'id' => $model->id]);
+            }else{
+                return $this->redirect(['index']);
+            }
+
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -120,8 +128,15 @@ class CarController extends Controller {
      * @return mixed
      */
     public function actionDelete($id) {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
 
+        // validate deletion and on failure process any exception
+        // e.g. display an error message
+        if ($model->delete()) {
+            if (!$model->deleteImage()) {
+                Yii::$app->session->setFlash('error', 'Error eliminando la imagen');
+            }
+        }
         return $this->redirect(['index']);
     }
 
