@@ -12,11 +12,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="person-index">
 
-    <div class="well well-sm text-center">
-        <h1><?= Html::encode ($this->title) ?></h1>
-    </div>
-
-    <br><br>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,

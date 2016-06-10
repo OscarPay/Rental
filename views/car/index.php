@@ -1,36 +1,41 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\CarSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Cars';
+$this->title = 'Automóviles';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="car-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a('Create Car', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'export' => false,
+        'responsive'=>true,
+        'hover'=>true,
+        'toolbar'=> [
+            ['content'=>
+                Html::a('<i class="glyphicon glyphicon-plus"></i> Crear Automóvil', ['create'],
+                    ['class' => 'btn btn-success pull-right'])
+            ],
+        ],
+        'panel' => [
+            'type' => 'default',
+            'heading' => '<h4><i class="glyphicon glyphicon-list"></i> Automóviles </h4>',
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'imagen',
-            'transmision',
+            //'transmision',
             'modelo',
             'marca',
-            // 'placas',
-            // 'tipo',
+            'placas',
+            'tipo',
             // 'poliza',
             // 'num_serie',
             // 'num_pasajeros',
