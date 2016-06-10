@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\PersonSearch */
@@ -16,14 +16,23 @@ $this->params['breadcrumbs'][] = $this->title;
         <h1><?= Html::encode ($this->title) ?></h1>
     </div>
 
-    <p>
-        <?= Html::a('Crear Vendedor', ['create-vendedor'], ['class' => 'btn btn-success pull-right']) ?>
-    </p>
-
     <br><br>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'export' => false,
+        'responsive'=>true,
+        'hover'=>true,
+        'toolbar'=> [
+            ['content'=>
+                Html::a('<i class="glyphicon glyphicon-plus"></i> Crear Vendedor', ['create-vendedor'],
+                    ['class' => 'btn btn-success pull-right'])
+            ],
+        ],
+        'panel' => [
+            'type' => 'default',
+            'heading' => '<h4><i class="glyphicon glyphicon-list"></i> Vendedores</h4>',
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
