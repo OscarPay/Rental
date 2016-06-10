@@ -31,10 +31,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
+            'nombre',
             //'transmision',
             'modelo',
             'marca',
-            'placas',
+            //'placas',
+            //'precio',
             'tipo',
             // 'poliza',
             // 'num_serie',

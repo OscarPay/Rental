@@ -14,6 +14,7 @@ class m160610_124209_create_car extends Migration
     {
         $this->createTable('car', [
             'id' => $this->primaryKey(),
+            'nombre' => $this->string()->notNull(),
             'imagen' => $this->string()->notNull(),
             'transmision' => $this->string()->notNull(),
             'modelo' => $this->string()->notNull(),
@@ -25,6 +26,7 @@ class m160610_124209_create_car extends Migration
             'num_pasajeros' => $this->string()->notNull(),
             'precio' => $this->float(2)->notNull(),
             'descripcion' => $this->text()->notNull(),
+            'status' => $this->string()->notNull()
         ]);
     }
 

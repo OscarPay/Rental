@@ -22,6 +22,9 @@ use yii\web\UploadedFile;
  */
 class Car extends \yii\db\ActiveRecord {
 
+    const DISPONIBLE = "DISPONIBLE";
+    const RENTADO = "RENTADO";
+
     /**
      * @inheritdoc
      */
@@ -35,8 +38,9 @@ class Car extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['imagen', 'transmision', 'precio', 'modelo', 'marca', 'placas', 'tipo', 'poliza', 'num_serie',
-                'num_pasajeros', 'descripcion'], 'required', 'message' => 'No puede estar vacío'],
+                'num_pasajeros', 'descripcion', 'nombre'], 'required', 'message' => 'No puede estar vacío'],
             [['descripcion'], 'string'],
+            [['status'], 'default', 'value' => $this::DISPONIBLE],
             [['precio'], 'number', 'message' => 'Debe ser un número'],
             [['imagen'], 'safe'],
             [['imagen'], 'file', 'extensions' => 'jpg, gif, png'],
@@ -60,6 +64,9 @@ class Car extends \yii\db\ActiveRecord {
             'num_serie' => 'Num Serie',
             'num_pasajeros' => 'Num Pasajeros',
             'descripcion' => 'Descripcion',
+            'precio' => 'Precio',
+            'status' => 'Estatus',
+            'nombre' => 'Nombre'
         ];
     }
 

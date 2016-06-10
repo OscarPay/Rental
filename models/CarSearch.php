@@ -10,24 +10,21 @@ use app\models\Car;
 /**
  * CarSearch represents the model behind the search form about `app\models\Car`.
  */
-class CarSearch extends Car
-{
+class CarSearch extends Car {
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['id'], 'integer'],
-            [['imagen', 'transmision', 'modelo', 'marca', 'placas', 'tipo', 'poliza', 'num_serie', 'num_pasajeros', 'descripcion'], 'safe'],
+            [['imagen', 'nombre', 'transmision', 'modelo', 'marca', 'placas', 'tipo', 'poliza', 'num_serie', 'num_pasajeros', 'descripcion'], 'safe'],
         ];
     }
 
     /**
      * @inheritdoc
      */
-    public function scenarios()
-    {
+    public function scenarios() {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
@@ -39,8 +36,7 @@ class CarSearch extends Car
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
+    public function search($params) {
         $query = Car::find();
 
         // add conditions that should always apply here
@@ -63,6 +59,7 @@ class CarSearch extends Car
         ]);
 
         $query->andFilterWhere(['like', 'imagen', $this->imagen])
+            ->andFilterWhere(['like', 'nombre', $this->nombre])
             ->andFilterWhere(['like', 'transmision', $this->transmision])
             ->andFilterWhere(['like', 'modelo', $this->modelo])
             ->andFilterWhere(['like', 'marca', $this->marca])

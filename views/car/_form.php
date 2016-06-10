@@ -17,6 +17,8 @@ use kartik\file\FileInput;
 
     <div class="row">
         <div class="col-lg-6">
+            <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
+
             <?= $form->field($model, 'transmision')->textInput(['maxlength' => true]) ?>
 
             <?= $form->field($model, 'modelo')->textInput(['maxlength' => true]) ?>
@@ -35,6 +37,8 @@ use kartik\file\FileInput;
 
             <?= $form->field($model, 'num_pasajeros')->textInput(['maxlength' => true]) ?>
 
+            <?= $form->field($model, 'placas')->textInput(['maxlength' => true]) ?>
+
         </div>
 
     </div>
@@ -43,8 +47,6 @@ use kartik\file\FileInput;
     <div class="row">
 
         <div class="col-lg-12">
-
-            <?= $form->field($model, 'placas')->textInput(['maxlength' => true]) ?>
 
             <?= $form->field($model, 'imagen')->widget(FileInput::className(), [
                 'options'=>['accept'=>'image/*'],
