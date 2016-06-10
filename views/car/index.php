@@ -43,7 +43,21 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'num_pasajeros',
             // 'descripcion:ntext',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update} {delete}',
+                'buttons' => [
+                    'delete' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>',
+                            ['delete', 'id' => $model['id']],
+                            [
+                                'title' => 'Eliminar',
+                                'data-confirm' => '¿Estas seguro que deseas eliminar el automóvil?',
+                                'data-method' => 'post'
+                            ]);
+                    }
+                ]
+            ],
         ],
     ]); ?>
 </div>

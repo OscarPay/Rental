@@ -140,4 +140,8 @@ class Car extends \yii\db\ActiveRecord {
 
         return true;
     }
+
+    public function getFullName() {
+        return $this->nombre . " " . $this->marca;
+    }
 }
