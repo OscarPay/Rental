@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use kartik\detail\DetailView;
+use app\models\Person;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Car */
@@ -18,6 +19,8 @@ $title = $model->marca
         <h1><?= Html::encode($this->title) ?></h1>
     </div>
 
+    <?php  if(Yii::$app->user->identity->tipo === Person::ADMINISTRADOR){ ?>
+
     <p class="pull-right">
         <?= Html::a('Actualizar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Eliminar', ['delete', 'id' => $model->id], [
@@ -27,6 +30,8 @@ $title = $model->marca
             'data-method' => 'post'
         ]) ?>
     </p>
+
+    <?php } ?>
 
     <br><br>
 

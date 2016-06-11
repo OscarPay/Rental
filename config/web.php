@@ -9,8 +9,8 @@ $config = [
     'components' => [
         'formatter' => [
             'dateFormat' => 'dd/MMMM/yyyy',
-            'decimalSeparator' => ',',
-            'thousandSeparator' => ' ',
+            'decimalSeparator' => '.',
+            'thousandSeparator' => ',',
             'currencyCode' => '$',
             'locale'=>'es_Mx'
         ],

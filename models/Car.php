@@ -38,10 +38,10 @@ class Car extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['imagen', 'transmision', 'precio', 'modelo', 'marca', 'placas', 'tipo', 'poliza', 'num_serie',
+            [['transmision', 'precio', 'modelo', 'marca', 'placas', 'tipo', 'poliza', 'num_serie',
                 'num_pasajeros', 'descripcion', 'nombre'], 'required', 'message' => 'No puede estar vacío'],
             [['descripcion'], 'string'],
-            [['num_pasajeros'], 'integer'],
+            [['num_pasajeros'], 'integer', 'message' => 'Debe ser un número entero'],
             [['status'], 'default', 'value' => $this::DISPONIBLE],
             [['precio'], 'number', 'message' => 'Debe ser un número'],
             [['imagen'], 'safe'],
@@ -89,8 +89,8 @@ class Car extends \yii\db\ActiveRecord {
      */
     public function getImageUrl() {
         // return a default image placeholder if your source imagen is not found
-        $imagen = isset($this->imagen) ? $this->imagen : 'default_car.jpg';
-        return Yii::$app->params['uploadUrl'] . $imagen;;
+        $imagen = $this->imagen != "" ? $this->imagen : 'default_car.jpg';
+        return Yii::$app->params['uploadUrl'] . $imagen;
     }
 
     /**

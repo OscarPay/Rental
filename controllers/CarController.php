@@ -85,6 +85,7 @@ class CarController extends Controller {
                     $path = $model->getImageFile();
                     $image->saveAs($path);
                 }
+                Yii::$app->getSession ()->setFlash ('success', 'El automóvil se ha creado exitosamente');
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 return $this->redirect(['index']);
@@ -123,6 +124,7 @@ class CarController extends Controller {
                     $path = $model->getImageFile();
                     $image->saveAs($path);
                 }
+                Yii::$app->getSession ()->setFlash ('success', 'El automóvil se ha actualizado exitosamente');
                 return $this->redirect(['view', 'id' => $model->id]);
             }else{
                 return $this->redirect(['index']);
@@ -151,6 +153,8 @@ class CarController extends Controller {
                 Yii::$app->session->setFlash('error', 'Error eliminando la imagen');
             }
         }
+
+        Yii::$app->getSession ()->setFlash ('success', 'El automóvil se ha eliminado exitosamente');
         return $this->redirect(['index']);
     }
 
