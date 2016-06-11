@@ -19,6 +19,7 @@ use yii\web\UploadedFile;
  * @property string $num_serie
  * @property string $num_pasajeros
  * @property string $descripcion
+ * @property string $precio
  */
 class Car extends \yii\db\ActiveRecord {
 
@@ -40,11 +41,12 @@ class Car extends \yii\db\ActiveRecord {
             [['imagen', 'transmision', 'precio', 'modelo', 'marca', 'placas', 'tipo', 'poliza', 'num_serie',
                 'num_pasajeros', 'descripcion', 'nombre'], 'required', 'message' => 'No puede estar vacío'],
             [['descripcion'], 'string'],
+            [['num_pasajeros'], 'integer'],
             [['status'], 'default', 'value' => $this::DISPONIBLE],
             [['precio'], 'number', 'message' => 'Debe ser un número'],
             [['imagen'], 'safe'],
             [['imagen'], 'file', 'extensions' => 'jpg, gif, png'],
-            [['imagen', 'transmision', 'modelo', 'marca', 'placas', 'tipo', 'poliza', 'num_serie', 'num_pasajeros'], 'string', 'max' => 255],
+            [['imagen', 'transmision', 'modelo', 'marca', 'placas', 'tipo', 'poliza', 'num_serie'], 'string', 'max' => 255],
         ];
     }
 

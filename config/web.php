@@ -7,6 +7,13 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log', 'app\components\Bootstrap'],
     'components' => [
+        'formatter' => [
+            'dateFormat' => 'dd/MMMM/yyyy',
+            'decimalSeparator' => ',',
+            'thousandSeparator' => ' ',
+            'currencyCode' => '$',
+            'locale'=>'es_Mx'
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'holamundo',
