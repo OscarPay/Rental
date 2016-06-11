@@ -42,6 +42,7 @@ class Car extends \yii\db\ActiveRecord {
                 'num_pasajeros', 'descripcion', 'nombre'], 'required', 'message' => 'No puede estar vacío'],
             [['descripcion'], 'string'],
             [['num_pasajeros'], 'integer', 'message' => 'Debe ser un número entero'],
+            [['imagen'], 'default', 'value' => 'default_car.jpg'],
             [['status'], 'default', 'value' => $this::DISPONIBLE],
             [['precio'], 'number', 'message' => 'Debe ser un número'],
             [['imagen'], 'safe'],
@@ -133,9 +134,12 @@ class Car extends \yii\db\ActiveRecord {
         }
 
         // check if uploaded file can be deleted on server
-        if (!unlink($file)) {
-            return false;
+        if($file !== Yii::$app->params['uploadPath'] . 'default_car.jpg'){
+            if (!unlink($file)) {
+                return false;
+            }
         }
+
 
         // if deletion successful, reset your file attributes
         $this->imagen = null;

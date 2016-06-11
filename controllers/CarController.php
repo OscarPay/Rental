@@ -120,7 +120,11 @@ class CarController extends Controller {
 
             if($model->save()){
                 // upload only if valid uploaded file instance found
-                if ($image !== false && unlink($oldFile)) { // delete old and overwrite
+                if ($image !== false) { // delete old and overwrite
+                    if($oldFile !== Yii::$app->params['uploadPath'] . 'default_car.jpg'){
+                        unlink($oldFile);
+                    }
+
                     $path = $model->getImageFile();
                     $image->saveAs($path);
                 }
@@ -150,7 +154,7 @@ class CarController extends Controller {
         // e.g. display an error message
         if ($model->delete()) {
             if (!$model->deleteImage()) {
-                Yii::$app->session->setFlash('error', 'Error eliminando la imagen');
+                Yii::$app->session->setFlash('danger', 'Error eliminando la imagen');
             }
         }
 
