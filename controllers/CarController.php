@@ -43,6 +43,20 @@ class CarController extends Controller {
     }
 
     /**
+     * Lists all Car models.
+     * @return mixed
+     */
+    public function actionIndexClientes() {
+        $searchModel = new CarSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index-clientes', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
      * Displays a single Car model.
      * @param integer $id
      * @return mixed
