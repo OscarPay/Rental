@@ -8,7 +8,7 @@ use app\models\Person;
 /* @var $model app\models\Car */
 
 $this->title = $model->getFullName();
-$this->params['breadcrumbs'][] = ['label' => 'Automóviles', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Automóviles', 'url' => ['index-clientes']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $title = $model->marca
@@ -53,7 +53,10 @@ $title = $model->marca
                 if ($model->status === \app\models\Car::DISPONIBLE) {
 
                     if (Yii::$app->user->identity->tipo === Person::CLIENTE) {
-                        echo Html::a('Rentar', ['update', 'id' => $model->id], ['class' => 'btn btn-warning btn-lg btn-block']);
+                        echo Html::a('Solicitar Renta', '#', ['class' => 'btn btn-warning btn-lg btn-block',
+                            'data-toggle' => "modal",
+                            'data-target' => "#modalChooseDate"]
+                        );
                     }
 
                     echo '<h2><span class="label label-success">' . $model->status . '</span></h2>';
@@ -100,3 +103,7 @@ $title = $model->marca
 
 
 </div>
+
+<?= $this->render ('/rent/modalCreateRent', [
+    'automovil_id' => $model->id,
+]) ?>
