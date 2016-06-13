@@ -121,7 +121,7 @@ class CarController extends Controller {
             if($model->save()){
                 // upload only if valid uploaded file instance found
                 if ($image !== false) { // delete old and overwrite
-                    if($oldFile !== Yii::$app->params['uploadPath'] . 'default_car.jpg'){
+                    if($oldFile !== Yii::$app->params['uploadPath'] . 'default_car.jpg' && file_exists($oldFile)){
                         unlink($oldFile);
                     }
 
