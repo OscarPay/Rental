@@ -15,17 +15,22 @@ use \yii\helpers\Url;
     <?php foreach ($dataProvider->getModels() as $car) { ?>
 
         <div class="row">
-            <div class="col-lg-offset-3 col-lg-6 text-center">
+            <div class="col-lg-6 text-center">
                 <div class="thumbnail">
                     <img src="<?= $car->getImageUrl(); ?>" alt="...">
-                    <div class="caption">
-                        <h3><?= $car->getFullName(); ?></h3>
-                        <p><?= Yii::$app->formatter->asCurrency($car->precio) ?> por día</p>
-                        <p><a href="<?= Url::to (['/car/view', 'id' => $car->id]) ?>" class="btn btn-primary" role="button">Ver</a></p>
-                    </div>
                 </div>
             </div>
+            <div class="col-lg-6">
+                <h1><?= $car->getFullName(); ?></h1>
+                <h3><?= Yii::$app->formatter->asCurrency($car->precio) ?> por día</h3>
+                <p><?= $car->descripcion; ?></p>
+                <p><a href="<?= Url::to(['/car/view', 'id' => $car->id]) ?>" class="btn btn-primary"
+                      role="button">Más detalles</a></p>
+            </div>
+
         </div>
+
+        <hr>
 
     <?php } ?>
 
