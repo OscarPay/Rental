@@ -42,6 +42,26 @@ class RentController extends Controller {
         ]);
     }
 
+    public function actionIndexAprobados() {
+        $searchModel = new RentSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, Rent::APROBADO);
+
+        return $this->render('index-aprobados', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionIndexPorAprobar() {
+        $searchModel = new RentSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, Rent::NO_APROBADO);
+
+        return $this->render('index-por-aprobar', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
     /**
      * Displays a single Rent model.
      * @param integer $id
@@ -51,6 +71,34 @@ class RentController extends Controller {
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+
+    public function actionAprobar($id) {
+        $model = $this->findModel($id);
+        $model->status = Rent::APROBADO;
+        $model->vendedor_id = Yii::$app->user->identity->getId();
+
+        if ($model->save()) {
+            Yii::$app->session->setFlash('success', 'La renta ha sido aprobada con éxito');
+        }else{
+            Yii::$app->session->setFlash('danger', 'Error al actualizar el estado de la renta');
+        }
+
+        return $this->redirect(['index-aprobados']);
+    }
+
+    public function actionCancelar($id) {
+        $model = $this->findModel($id);
+        $model->status = Rent::CANCELADO;
+        $model->vendedor_id = Yii::$app->user->identity->getId();
+
+        if ($model->save()) {
+            Yii::$app->session->setFlash('success', 'La renta ha sido cancelada con éxito');
+        }else{
+            Yii::$app->session->setFlash('danger', 'Error al actualizar el estado de la renta');
+        }
+
+        return $this->redirect(['index-por-aprobar']);
     }
 
     /**

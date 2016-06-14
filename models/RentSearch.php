@@ -10,13 +10,11 @@ use app\models\Rent;
 /**
  * RentSearch represents the model behind the search form about `app\models\Rent`.
  */
-class RentSearch extends Rent
-{
+class RentSearch extends Rent {
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['id', 'automovil_id', 'cliente_id', 'vendedor_id', 'num_dias'], 'integer'],
             [['status', 'fecha_entrega', 'fecha_devolucion', 'lugar_entrega', 'nota'], 'safe'],
@@ -27,8 +25,7 @@ class RentSearch extends Rent
     /**
      * @inheritdoc
      */
-    public function scenarios()
-    {
+    public function scenarios() {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
@@ -40,12 +37,12 @@ class RentSearch extends Rent
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
+    public function search($params, $status = null) {
         $query = Rent::find();
 
-        // add conditions that should always apply here
+        $query->joinWith(['cliente', 'automovil']);
 
+        // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -67,10 +64,10 @@ class RentSearch extends Rent
             'num_dias' => $this->num_dias,
             'total' => $this->total,
             'penalizacion' => $this->penalizacion,
+            'rent.status' => $status
         ]);
 
-        $query->andFilterWhere(['like', 'status', $this->status])
-            ->andFilterWhere(['like', 'fecha_entrega', $this->fecha_entrega])
+        $query->andFilterWhere(['like', 'fecha_entrega', $this->fecha_entrega])
             ->andFilterWhere(['like', 'fecha_devolucion', $this->fecha_devolucion])
             ->andFilterWhere(['like', 'lugar_entrega', $this->lugar_entrega])
             ->andFilterWhere(['like', 'nota', $this->nota]);

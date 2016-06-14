@@ -39,24 +39,28 @@ AppAsset::register($this);
         ],
     ]);
 
-    if(Yii::$app->user->isGuest){
+    if (Yii::$app->user->isGuest) {
         //array_push($elementosNav,  ['label' => 'About', 'url' => ['/site/about']]);
         //array_push($elementosNav, ['label' => 'Contact', 'url' => ['/site/contact']]);
         array_push($elementosNav, ['label' => 'Login', 'url' => ['/site/login']]);
-    }else{
+    } else {
 
-        if(Yii::$app->user->identity->tipo === Person::ADMINISTRADOR){
-            array_push($elementosNav,  ['label' => 'Automóviles', 'url' => ['/car/index']]);
-            array_push($elementosNav,  ['label' => 'Vendedores', 'url' => ['/person/index-vendedores']]);
+        if (Yii::$app->user->identity->tipo === Person::ADMINISTRADOR) {
+            array_push($elementosNav, ['label' => 'Automóviles', 'url' => ['/car/index']]);
+            array_push($elementosNav, ['label' => 'Vendedores', 'url' => ['/person/index-vendedores']]);
         }
 
-        if(Yii::$app->user->identity->tipo === Person::VENDEDOR){
-            array_push($elementosNav,  ['label' => 'Automóviles', 'url' => "#"]);
-            array_push($elementosNav,  ['label' => 'Clientes', 'url' => ['/person/index-clientes']]);
+        if (Yii::$app->user->identity->tipo === Person::VENDEDOR) {
+            array_push($elementosNav, ['label' => 'Automóviles', 'url' => "#"]);
+            array_push($elementosNav, ['label' => 'Rentas', 'items' => [
+                ['label' => 'Por Aprobadar', 'url' => ['/rent/index-por-aprobar']],
+                ['label' => 'Aprobadas', 'url' => ['/rent/index-aprobados']]
+            ]]);
+            array_push($elementosNav, ['label' => 'Clientes', 'url' => ['/person/index-clientes']]);
         }
 
-        if(Yii::$app->user->identity->tipo === Person::CLIENTE){
-            array_push($elementosNav,  ['label' => 'Automóviles', 'url' => ['/car/index-clientes']]);
+        if (Yii::$app->user->identity->tipo === Person::CLIENTE) {
+            array_push($elementosNav, ['label' => 'Automóviles', 'url' => ['/car/index-clientes']]);
         }
 
         array_push($elementosNav,
@@ -84,8 +88,8 @@ AppAsset::register($this);
         ]) ?>
 
         <?php
-        foreach (Yii::$app->getSession ()->getAllFlashes () as $key => $message) {
-            echo Alert::widget ([
+        foreach (Yii::$app->getSession()->getAllFlashes() as $key => $message) {
+            echo Alert::widget([
                 'options' => [
                     'class' => 'alert-' . $key,
                 ],
