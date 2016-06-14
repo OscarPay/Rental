@@ -93,4 +93,16 @@ class Rent extends \yii\db\ActiveRecord {
     public function getVendedor() {
         return $this->hasOne(Person::className(), ['id' => 'vendedor_id']);
     }
+
+
+    public function getLabelStatus(){
+        switch($this->status){
+            case $this::APROBADO:
+                return '<span class="label label-success">'. $this::APROBADO .'</span>';
+            case $this::CANCELADO:
+                return '<span class="label label-danger">'. $this::CANCELADO .'</span>';
+            default:
+                return '<span class="label label-primary">'. $this::NO_APROBADO .'</span>';
+        }
+    }
 }

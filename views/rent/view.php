@@ -2,19 +2,22 @@
 
 use yii\helpers\Html;
 use kartik\detail\DetailView;
+use app\models\Person;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Rent */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Rents', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="rent-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="well well-sm text-center">
+        <h1><?= Html::encode ($this->title) ?></h1>
+    </div>
 
-    <p>
+    <?php if (Yii::$app->user->identity->tipo === Person::CLIENTE) { ?>
+
+    <p class="pull-right">
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
@@ -25,14 +28,29 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
+    <br><br><br>
+
+    <?php } ?>
+
     <?= DetailView::widget([
+        'hideIfEmpty' => true,
+        'hAlign' => DetailView::ALIGN_LEFT,
         'model' => $model,
         'attributes' => [
-            'id',
-            'automovil_id',
-            'cliente_id',
+            [
+                'label' => 'Automóvil',
+                'value' => $model->automovil->getFullName()
+            ],
+            [
+                'label' => 'Cliente',
+                'value' => $model->cliente->getFullName()
+            ],
             'vendedor_id',
-            'status',
+            [
+                'label' => 'Status',
+                'format' => 'html',
+                'value' => $model->getLabelStatus()
+            ],
             'num_dias',
             'total',
             'fecha_entrega',
