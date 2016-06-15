@@ -8,35 +8,59 @@ use app\models\Person;
 /* @var $model app\models\Rent */
 
 $this->title = $model->id;
+$attributes = [];
 ?>
 <div class="rent-view">
 
     <div class="well well-sm text-center">
-        <h1><?= Html::encode ($this->title) ?></h1>
+        <h1>Renta de <?= $model->automovil->getFullName() ?></h1>
     </div>
 
-    <?php if (Yii::$app->user->identity->tipo === Person::CLIENTE) { ?>
+    <?php
 
-    <p class="pull-right">
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+    $vendedor = [
+        'label' => 'Vendedor',
+        'value' => null
+    ];
 
-    <br><br><br>
+    if ($model->status !== \app\models\Rent::NO_APROBADO) {
+        $vendedor = [
+            'label' => 'Vendedor',
+            'value' => $model->vendedor->getFullName()
+        ];
+    }
 
-    <?php } ?>
+    if (Yii::$app->user->identity->tipo === Person::CLIENTE) {
 
-    <?= DetailView::widget([
-        'hideIfEmpty' => true,
-        'hAlign' => DetailView::ALIGN_LEFT,
-        'model' => $model,
-        'attributes' => [
+
+
+    $attributes = [
+        [
+            'label' => 'Automóvil',
+            'value' => $model->automovil->getFullName()
+        ],
+        $vendedor,
+        [
+            'label' => 'Status',
+            'format' => 'html',
+            'value' => $model->getLabelStatus()
+        ],
+        'num_dias',
+        [
+            'label' => 'Total',
+            'format' => 'currency',
+            'value' => $model->total
+        ],
+        'fecha_entrega',
+        'fecha_devolucion',
+        'lugar_entrega',
+        'penalizacion',
+        'nota',
+    ];
+
+    } else {
+
+        $attributes = [
             [
                 'label' => 'Automóvil',
                 'value' => $model->automovil->getFullName()
@@ -45,20 +69,32 @@ $this->title = $model->id;
                 'label' => 'Cliente',
                 'value' => $model->cliente->getFullName()
             ],
-            'vendedor_id',
+            $vendedor,
             [
                 'label' => 'Status',
                 'format' => 'html',
                 'value' => $model->getLabelStatus()
             ],
             'num_dias',
-            'total',
+            [
+                'label' => 'Total',
+                'format' => 'currency',
+                'value' => $model->total
+            ],
             'fecha_entrega',
             'fecha_devolucion',
             'lugar_entrega',
             'penalizacion',
             'nota',
-        ],
+        ];
+
+    } ?>
+
+    <?= DetailView::widget([
+        'hideIfEmpty' => true,
+        'hAlign' => DetailView::ALIGN_LEFT,
+        'model' => $model,
+        'attributes' => $attributes,
     ]) ?>
 
 </div>

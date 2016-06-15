@@ -34,7 +34,7 @@ class RentController extends Controller {
      */
     public function actionIndex() {
         $searchModel = new RentSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, null, Yii::$app->user->identity->getId());
 
         return $this->render('index', [
             'searchModel' => $searchModel,

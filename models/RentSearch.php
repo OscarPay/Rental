@@ -37,7 +37,7 @@ class RentSearch extends Rent {
      *
      * @return ActiveDataProvider
      */
-    public function search($params, $status = null) {
+    public function search($params, $status = null, $cliente = null) {
         $query = Rent::find();
 
         $query->joinWith(['cliente', 'automovil']);
@@ -59,7 +59,7 @@ class RentSearch extends Rent {
         $query->andFilterWhere([
             'id' => $this->id,
             'automovil_id' => $this->automovil_id,
-            'cliente_id' => $this->cliente_id,
+            'cliente_id' => $cliente,
             'vendedor_id' => $this->vendedor_id,
             'num_dias' => $this->num_dias,
             'total' => $this->total,

@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        'filterModel' => null,
         'export' => false,
         'responsive'=>true,
         'hover'=>true,
@@ -26,15 +26,28 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             //'id',
-            'automovil_id',
-            'cliente_id',
+            [
+                'label' => 'Automóvil',
+                'attribute' => 'automovil',
+                'value' => function ($model) {
+                    return $model->automovil->getFullName();
+                },
+            ],
+            //'cliente_id',
             //'vendedor_id',
-            'status',
+            [
+                'label' => 'Status',
+                'attribute' => 'status',
+                'format' => 'html',
+                'value' => function ($model) {
+                    return $model->getLabelStatus();
+                },
+            ],
             // 'num_dias',
             // 'total',
             // 'fecha_entrega',
             'fecha_devolucion',
-            // 'lugar_entrega',
+            'lugar_entrega',
             // 'penalizacion',
             // 'nota',
 
