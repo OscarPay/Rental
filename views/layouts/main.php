@@ -47,6 +47,7 @@ AppAsset::register($this);
 
         if (Yii::$app->user->identity->tipo === Person::ADMINISTRADOR) {
             array_push($elementosNav, ['label' => 'Automóviles', 'url' => ['/car/index']]);
+            array_push($elementosNav, ['label' => 'Rentas', 'url' => ['/rent/index-aprobados']]);
             array_push($elementosNav, ['label' => 'Vendedores', 'url' => ['/person/index-vendedores']]);
         }
 
