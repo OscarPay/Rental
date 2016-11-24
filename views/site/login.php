@@ -11,9 +11,7 @@ $this->title = 'Iniciar sesión';
 ?>
 <div class="site-login">
 
-    <br>
-    <br>
-    <br>
+    <img src="logomayanheritage.png" alt="logo">
 
     <div class="row">
         <div class="col-lg-offset-4 col-lg-4">

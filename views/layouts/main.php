@@ -32,10 +32,10 @@ AppAsset::register($this);
     $elementosNav = [];
 
     NavBar::begin([
-        'brandLabel' => 'Rental',
+        'brandLabel' => 'Mayan Heritage',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+            'class' => 'my-navbar navbar-fixed-top',
         ],
     ]);
 
@@ -106,7 +106,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; Rental <?= date('Y') ?></p>
+        <a href="http://www.mayanheritage.com.mx/" class="pull-left">&copy; Mayan Heritage <?= date('Y') ?></a>
 
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>

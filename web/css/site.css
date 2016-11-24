@@ -89,3 +89,51 @@ a.desc:after {
     padding: 10px 20px;
     margin: 0 0 15px 0;
 }
+
+nav.my-navbar {
+    background-color: #F47B20;
+}
+
+nav a{
+    color: #FFFFFF
+}
+
+nav button.btn-link{
+    color: #FFFFFF
+}
+
+nav button.btn-link:hover{
+    color: #FFFFFF
+}
+
+button.btn-primary, a.btn-success, button.btn-success {
+    background-color: #72CCD2;
+    border-color: #72CCD2;
+}
+
+button.btn-primary:hover, a.btn-success:hover, button.btn-success:hover{
+    background-color: #140D4F;
+    border-color: #140D4F;
+}
+
+div.well{
+    background-color: #7AC143;
+    color: #FFF;
+}
+
+div.site-login{
+    color: #72CCD2;
+}
+
+.footer {
+    background-color: #E50E63;
+    color: #fff
+}
+
+.footer a {
+    color: #fff
+}
+
+.error-summary{
+    color: #C32F27;
+}
