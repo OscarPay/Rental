@@ -1,6 +1,119 @@
 Change Log: `bootstrap-fileinput`
 =================================
 
+## version 4.3.8
+
+**Date:** 21-Feb-2017
+
+1. (bug #870): Correct config.width parsing.
+2. (bug #872): Correct typo in `bootstrap.min.css`.
+3. (enh #874): Enhance/Standardize CSS Styles for Krajee Default Theme.
+4. (enh #876): Update Spanish Translations.
+5. (enh #879): Update Russian Translations.
+
+## version 4.3.7
+
+**Date:** 11-Feb-2017
+
+1. (enh #812): Update Greek Translations.
+2. (enh #815): Enhance parsing of thumbnails that are visible in preview (will allow plugin to be 
+    initialized in hidden containers like tabs).
+3. (enh #816): New property `msgFileTypes` to control descriptions/localizations of file types displayed.
+4. (bug #819): Correct init preview auto replace post `uploadSingle` action in thumbnails.
+5. (enh #820): Prevent resize if image is smaller than allowed dimensions.
+6. (enh #822): Enhancement for preventing upload when data is empty. New property `msgUploadEmpty` has been incorporated.
+7. (enh #823): Correct file indices assignment during validation of images.
+8. (enh #824): Add Korean Translations.
+9. (bug #825): Correct `fileimagesresized` event triggering.
+10. (bug #826): Extend language configuration to consider defaults.
+11. (enh #828): Allow drag sort of single uploaded thumbnails with `initialPreview` config set (post upload).
+12. (enh #831): Update Finnish Translations.
+13. (bug #833): Correct validation and defaults init for `allowedPreviewTypes`.
+14. (bug #834): Correct clearing of file preview including zoom cache.
+15. (enh #835): Update Polish Translations.
+16. (enh #837): Update Czech Translations.
+17. (bug #839): Correct `initialPreview` generation and sortable behavior for async uploads.
+18. (enh #844): Display zoom preview navigation buttons only when multiple files exist.
+19. (enh #662, #725): Enhance preview modal to be appended to body before each zoom action (if `body` tag exists). 
+20. (enh #847): Update German Translations. 
+21. (enh #851): Create Kazakh Translations. 
+22. (bug #852): Ensure `frameClass` setting in `initialPreviewConfig` is considered. 
+23. (enh #854): Better file size calculation and display.
+24. (enh #857): Default error handling for unknown ajax errors.
+25. (enh #858): Thumb Frame CSS class as configurable property.
+26. (enh #859): Enhance and revamp preview caching.
+27. (enh #860): Initialize template defaults in a better manner.
+28. (enh #861): New properties within `layoutTemplates`.
+29. (enh #862): Launch a brand new Krajee theme: `explorer`.
+
+## version 4.3.6
+
+**Date:** 17-Dec-2016
+
+1. (enh #696): Better default preview zoom settings.
+2. (enh #764): Update Russian Translations.
+3. (enh #771): Update Chinese Translations.
+4. (enh #769, #785, #786, #787): Better image resized event handling.
+5. (enh #779, #789): More correct thumbnail identification post rearrange.
+6. (enh #782): New validation for invalid slug file name (caption):
+   - if slug callback returns an empty string, then an error will be thrown using `msgInvalidFileName`.
+   - if slug callback returns `false` then the next file will be read and current file skipped.
+7. (enh #788): New validation for minimum file size:
+   - new property `minFileSize` which validates the minimum file size in KB for upload, else throws
+     a validation error using `msgSizeTooSmall`. This defaults to `0`.
+   - if `minFileSize` is set to `null`, then above validation is skipped and no minimum file size 
+     check is performed.
+8. (enh #791): Auto orientation of images based on EXIF data.
+9. (enh #799): Fix IE memory issue on image load.
+10. (enh #800): Update Spanish Translations.
+11. (enh #802): Allow MOV files preview for supported devices and browsers.
+12. (enh #803): Update Hungarian Translations.
+13. (enh #804): Add Slovenian Translations.
+14. (enh #809): Various enhancements for preview control and iconic thumbnails.
+    - add ability to control and render different previews for file thumbnails and zoomed preview content
+    - new property `preferIconicPreview` will try to parse the `previewFileIconSettings` and `previewFileExtSettings` to automatically force iconic previews for file thumbnails.
+    - new property `preferIconicZoomPreview` will try to parse the `previewFileIconSettings` and `previewFileExtSettings` to automatically force iconic previews in the zoomed content.
+    - the above properties will be applied and parsed for `initialPreview` content as well.
+
+## version 4.3.5
+
+**Date:** 20-Sep-2016
+
+1. (bug #734): Correct right parsing of `fileuploaded` event params.
+2. (enh #736): Update Portugese Brazilian Translations.
+3. (enh #741): Update Vietnamese Translations.
+4. (enh #745): Update Russian Translations.
+5. (bug #753): Correct IE11 file clear bug when using without ajax.
+6. (bug #758): Correct file slug name parsing for an invalid file extension.
+
+## version 4.3.4
+
+**Date:** 07-Aug-2016
+
+1. (bug #710): Fix bug for `ifSet` validation.
+2. Add contribution templates.
+3. (enh #715): Reset caption correctly on clear.
+4. (enh #718): Update Japanese Translations.
+5. (enh #719): Pass right `previewId` to `fileuploaded` event.
+6. (enh #721): Update Turkish Translations.
+7. (bug #722): Correctly concat ajax output in initial preview.
+8. (enh #728): Change sortable plugin name to avoid conflict with JUI Sortable.
+9. (enh #729): Implement `progressUploadThreshold` to show processing when waiting for server response.
+10. (enh #730): Correct Romanian Translations.
+11. (enh #731): New method `getFilesCount` for returning upl + non-upl files count.
+
+## version 4.3.3
+
+**Date:** 09-Jul-2016
+
+1. (enh #680): Populate filestack for files greater than maxFilePreviewSize.
+2. (enh #695): Update Spanish Translations.
+3. (enh #698): Re-enable drag and drop support for IE Edge.
+4. (bug #700): Fix custom preview icons to be displayed and validated correctly.
+5. (enh #702): Add files to stack correctly for max & min preview size validation.
+6. (enh #704): Add grammatically correct "No files selected" message.
+7. (enh #706): Remove invalid files from filestack correctly for validation errors.
+
 ## version 4.3.2
 
 **Date:** 11-Jun-2016

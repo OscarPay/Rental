@@ -4,23 +4,25 @@
  * @package   yii2-detail-view
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2016
- * @version   1.7.4
+ * @version   1.7.5
  */
 
 namespace kartik\detail;
 
+use Closure;
+use kartik\base\Config;
+use kartik\base\TranslationTrait;
+use kartik\base\WidgetTrait;
+use kartik\dialog\Dialog;
+use kartik\helpers\Html;
 use Yii;
 use yii\base\Arrayable;
 use yii\base\InvalidConfigException;
-use yii\bootstrap\Alert;
 use yii\base\Model;
+use yii\bootstrap\Alert;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
 use yii\widgets\ActiveForm;
-use kartik\base\Config;
-use kartik\helpers\Html;
-use kartik\base\WidgetTrait;
-use kartik\base\TranslationTrait;
 
 /**
  * Enhances the Yii DetailView widget with various options to include Bootstrap specific styling enhancements. Also
@@ -88,7 +90,7 @@ class DetailView extends \yii\widgets\DetailView
 
     // input widget classes
     const INPUT_SPIN = '\kartik\touchspin\TouchSpin';
-    const INPUT_RATING = '\kartik\widgets\StarRating';
+    const INPUT_RATING = '\kartik\rating\StarRating';
     const INPUT_RANGE = '\kartik\range\RangeInput';
     const INPUT_COLOR = '\kartik\color\ColorInput';
     const INPUT_FILEINPUT = '\kartik\file\FileInput';
@@ -102,7 +104,7 @@ class DetailView extends \yii\widgets\DetailView
     const INPUT_CHECKBOX_X = '\kartik\checkbox\CheckboxX';
 
     // inputs list
-    private static $_inputsList = [
+    protected static $_inputsList = [
         self::INPUT_HIDDEN => 'hiddenInput',
         self::INPUT_TEXT => 'textInput',
         self::INPUT_PASSWORD => 'passwordInput',
@@ -119,7 +121,7 @@ class DetailView extends \yii\widgets\DetailView
     ];
 
     // dropdown inputs
-    private static $_dropDownInputs = [
+    protected static $_dropDownInputs = [
         self::INPUT_LIST_BOX => 'listBox',
         self::INPUT_DROPDOWN_LIST => 'dropDownList',
         self::INPUT_CHECKBOX_LIST => 'checkboxList',
@@ -262,6 +264,13 @@ class DetailView extends \yii\widgets\DetailView
     public $tooltips = true;
 
     /**
+     * @var array configuration settings for the Krajee dialog widget that will be used to render alerts and
+     *     confirmation dialog prompts
+     * @see http://demos.krajee.com/dialog
+     */
+    public $krajeeDialogSettings = [];
+
+    /**
      * @var array a list of attributes to be displayed in the detail view. Each array element represents the
      *     specification for displaying one particular attribute.
      *
@@ -271,46 +280,57 @@ class DetailView extends \yii\widgets\DetailView
      *     into a displayable text. Please refer to [[Formatter]] for the supported types. Both "format" and "label"
      *     are optional. They will take default values if absent.
      *
-     * An attribute can also be specified in terms of an array with the following elements:
+     * An attribute can also be specified in terms of an array with the following elements.
      *
-     * - attribute: the attribute name. This is required if either "label" or "value" is not specified.
-     * - label: the label associated with the attribute. If this is not specified, it will be generated from the
-     *     attribute name.
-     * - value: the value to be displayed. If this is not specified, it will be retrieved from [[model]] using the
-     *     attribute name by calling [[ArrayHelper::getValue()]]. Note that this value will be formatted into a
-     *     displayable text according to the "format" option.
-     * - format: the type of the value that determines how the value would be formatted into a displayable text. Please
-     *     refer to [[Formatter]] for supported types.
-     * - visible: whether the attribute is visible. If set to `false`, the attribute will NOT be displayed.
+     * - attribute: string|Closure, the attribute name. This is required if either "label" or "value" is not specified.
+     * - label: string|Closure, the label associated with the attribute. If this is not specified, it will be generated
+     *     from the attribute name.
+     * - value: mixed|Closure, the value to be displayed. If this is not specified, it will be retrieved from [[model]]
+     *     using the attribute name by calling [[ArrayHelper::getValue()]]. Note that this value will be formatted into
+     *     a displayable text according to the "format" option.
+     * - format: mixed|Closure, the type of the value that determines how the value would be formatted into a
+     *     displayable text. Please refer to [[Formatter]] for supported types.
+     * - visible: bool|Closure, whether the attribute is visible. If set to `false`, the attribute will NOT be
+     *     displayed.
      *
      * Additional special settings are:
-     * - viewModel: Model, the model to be used for this attribute in VIEW mode. This will override the `model` setting
-     *     at the widget level. If not set, the widget `model` setting will be used.
-     * - editModel: Model, the model to be used for this attribute in EDIT mode. This will override the `model` setting
-     *     at the widget level. If not set, the widget `model` setting will be used.
-     * - rowOptions: array, HTML attributes for the row (if not set, this will be defaulted to the `rowOptions` set at
-     *     the widget level)
-     * - labelColOptions: array, HTML attributes for the label column (if not set, this will be defaulted to the
+     * - viewModel: Model|Closure, the model to be used for this attribute in VIEW mode. This will override the `model`
+     *     setting at the widget level. If not set, the widget `model` setting will be used.
+     * - editModel: Model|Closure, the model to be used for this attribute in EDIT mode. This will override the `model`
+     *     setting at the widget level. If not set, the widget `model` setting will be used.
+     * - rowOptions: array|Closure, HTML attributes for the row (if not set, this will be defaulted to the `rowOptions`
+     *     set at the widget level)
+     * - labelColOptions: array|Closure, HTML attributes for the label column (if not set, this will be defaulted to
+     *     the
      *     `labelColOptions` set at the widget level)
-     * - valueColOptions: array, HTML attributes for the value column (if not set, this will be defaulted to
+     * - valueColOptions: array|Closure, HTML attributes for the value column (if not set, this will be defaulted to
      *     `valueColOptions` set at the widget level)
-     * - group: bool, whether to group the selection by merging the label and value into a single column.
-     * - groupOptions: array, HTML attributes for the grouped/merged column when `group` is set to `true`.
-     * - type: string, the input type for rendering the attribute in edit mode. Must be one of the
+     * - group: bool|Closure, whether to group the selection by merging the label and value into a single column.
+     * - groupOptions: array|Closure, HTML attributes for the grouped/merged column when `group` is set to `true`.
+     * - type: string|Closure, the input type for rendering the attribute in edit mode. Must be one of the
      *     [[DetailView::::INPUT_]] constants.
-     * - displayOnly: boolean, if the input is to be set to as `display only` in edit mode.
-     * - widgetOptions: array, the widget options if you set `type` to [[DetailView::::INPUT_WIDGET]]. The following
-     *     special options are recognized:
+     * - displayOnly: bool|Closure, if the input is to be set to as `display only` in edit mode.
+     * - widgetOptions: array|Closure, the widget options if you set `type` to [[DetailView::::INPUT_WIDGET]]. The
+     *     following special options are recognized:
      *   - `class`: string the fully namespaced widget class.
-     * - items: array, the list of data items  for dropDownList, listBox, checkboxList & radioList
-     * - inputType: string, the HTML 5 input type if `type` is set to [[DetailView::::INPUT_HTML 5]].
-     * - inputContainer: array, HTML attributes for the input container
-     * - inputWidth: string, the width of the container holding the input, should be appended along with the width unit
-     *     (`px` or `%`) - this property is deprecated since v1.7.4
-     * - fieldConfig: array, optional, the Active field configuration.
-     * - options: array, optional, the HTML attributes for the input.
-     * - updateAttr: string, optional, the name of the attribute to be updated, when in edit mode. This will default to
-     *     the `attribute` setting.
+     * - items: array|Closure, the list of data items  for dropDownList, listBox, checkboxList & radioList
+     * - inputType: string|Closure, the HTML 5 input type if `type` is set to [[DetailView::::INPUT_HTML 5]].
+     * - inputContainer: array|Closure, HTML attributes for the input container
+     * - inputWidth: string|Closure, the width of the container holding the input, should be appended along with the
+     *     width unit
+     *     (`px` or `%`) - this property is deprecated since v1.7.5
+     * - fieldConfig: array|Closure, optional, the Active field configuration.
+     * - options: array|Closure, optional, the HTML attributes for the input.
+     * - updateAttr: string|Closure, optional, the name of the attribute to be updated, when in edit mode. This will
+     *     default to the `attribute` setting.
+     * - updateMarkup: string|Closure, the raw markup to render in edit mode. If not set, this normally will be
+     *     automatically generated based on `attribute` or `updateAttr` setting. If this is set it will override the
+     *     default markup.
+     *
+     * Note that all of the attribute properties above can also be setup as a Closure callback with the signature
+     *      `function($form, $widget)`, where:
+     * - `$form`: ActiveForm, is the current active form object in the detail view.
+     * - `$widget`: DetailView, is the current detail view widget instance.
      */
     public $attributes;
 
@@ -535,16 +555,20 @@ class DetailView extends \yii\widgets\DetailView
      */
     protected function initWidget()
     {
-        /**
-         * @var ActiveForm $formClass
-         */
-        $formClass = $this->formClass;
         if ($this->enableEditMode) {
+            /**
+             * @var ActiveForm $formClass
+             */
+            $formClass = $this->formClass;
             $activeForm = ActiveForm::classname();
             if (!is_subclass_of($formClass, $activeForm) && $formClass !== $activeForm) {
                 throw new InvalidConfigException("Form class '{$formClass}' must exist and extend from '{$activeForm}'.");
             }
             $this->validateDisplay();
+            if (!isset($this->formOptions['fieldConfig']['template'])) {
+                $this->formOptions['fieldConfig']['template'] = "{input}\n{hint}\n{error}";
+            }
+            $this->_form = $formClass::begin($this->formOptions);
         }
         if ($this->bootstrap) {
             Html::addCssClass($this->options, 'table');
@@ -572,18 +596,10 @@ class DetailView extends \yii\widgets\DetailView
      */
     protected function runWidget()
     {
-        /**
-         * @var ActiveForm $formClass
-         */
-        $formClass = $this->formClass;
         if (empty($this->container['id'])) {
             $this->container['id'] = $this->getId();
         }
         $this->initI18N(__DIR__);
-        if ($this->enableEditMode) {
-            $this->formOptions['fieldConfig']['template'] = "{input}\n{hint}\n{error}";
-            $this->_form = $formClass::begin($this->formOptions);
-        }
         Html::addCssClass($this->alertContainerOptions, 'panel-body kv-alert-container');
         $this->alertMessageSettings += [
             'kv-detail-error' => 'alert alert-danger',
@@ -608,8 +624,13 @@ class DetailView extends \yii\widgets\DetailView
         }
         echo str_replace('{buttons}', Html::tag('div', $buttons, $this->buttonContainer), $output);
         if ($this->enableEditMode) {
+            /**
+             * @var ActiveForm $formClass
+             */
+            $formClass = $this->formClass;
             $formClass::end();
         }
+        
     }
 
     /**
@@ -624,9 +645,11 @@ class DetailView extends \yii\widgets\DetailView
         }
         $out = Html::beginTag('div', $this->alertContainerOptions);
         foreach ($flashes as $type => $message) {
-            $class = ArrayHelper::getValue($this->alertMessageSettings, $type, 'alert alert-' . $type);
+            if (!isset($this->alertMessageSettings[$type])) {
+                continue;
+            }
             $options = ArrayHelper::getValue($this->alertWidgetOptions, 'options', []);
-            Html::addCssClass($options, $class);
+            Html::addCssClass($options, ['alert', 'alert-' . $this->alertMessageSettings[$type]]);
             $this->alertWidgetOptions['body'] = $message;
             $this->alertWidgetOptions['options'] = $options;
             $out .= "\n" . Alert::widget($this->alertWidgetOptions);
@@ -643,7 +666,7 @@ class DetailView extends \yii\widgets\DetailView
      */
     protected function hasEditErrors()
     {
-        if (count($this->model->getErrors()) > 0) {
+        if ($this->model->hasErrors()) {
             return true;
         }
         foreach ($this->attributes as $attribute) {
@@ -653,7 +676,7 @@ class DetailView extends \yii\widgets\DetailView
             if (empty($attribute['editModel']) || !$attribute['editModel'] instanceof Model) {
                 continue;
             }
-            if ($attribute['editModel']->getErrors() > 0) {
+            if ($attribute['editModel']->hasErrors()) {
                 return true;
             }
         }
@@ -714,17 +737,6 @@ class DetailView extends \yii\widgets\DetailView
         if (isset($attribute['columns'])) {
             Html::addCssClass($this->_rowOptions, 'kv-child-table-row');
             $content = '<td class="kv-child-table-cell" colspan=2><table class="kv-child-table"><tr>';
-            if (!empty($child['attribute'])) {
-                $childName = $child['attribute'];
-                if (!isset($child['label'])) {
-                    $child['label'] = $this->model instanceof Model ?
-                        $this->model->getAttributeLabel($childName) :
-                        Inflector::camel2words($childName, true);
-                }
-                if (!array_key_exists('value', $child)) {
-                    $child['value'] = ArrayHelper::getValue($this->model, $childName);
-                }
-            }
             foreach ($attribute['columns'] as $child) {
                 $content .= $this->renderAttributeItem($child);
             }
@@ -819,13 +831,17 @@ class DetailView extends \yii\widgets\DetailView
         if (!$model instanceof Model) {
             $model = $this->model;
         }
+        if (isset($config['updateMarkup'])) {
+            $markup = $config['updateMarkup'];
+            return $markup instanceof Closure ? $markup($this->_form, $this) : $markup;
+        }
         $attr = ArrayHelper::getValue($config, 'updateAttr', $config['attribute']);
         $input = ArrayHelper::getValue($config, 'type', self::INPUT_TEXT);
         $fieldConfig = ArrayHelper::getValue($config, 'fieldConfig', []);
         $inputWidth = ArrayHelper::getValue($config, 'inputWidth', '');
         $container = ArrayHelper::getValue($config, 'inputContainer', []);
         if ($inputWidth != '') {
-            Html::addCssStyle($container, "width: {$inputWidth}"); // deprecated since v1.7.4
+            Html::addCssStyle($container, "width: {$inputWidth}"); // deprecated since v1.7.5
         }
         $template = ArrayHelper::getValue($fieldConfig, 'template', "{input}\n{error}\n{hint}");
         $row = Html::tag('div', $template, $container);
@@ -1003,6 +1019,7 @@ class DetailView extends \yii\widgets\DetailView
     {
         $view = $this->getView();
         DetailViewAsset::register($view);
+        Dialog::widget($this->krajeeDialogSettings);
         if (empty($this->alertWidgetOptions['closeButton'])) {
             $button = '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
         } else {
@@ -1028,7 +1045,8 @@ class DetailView extends \yii\widgets\DetailView
             'deleteParams' => ArrayHelper::getValue($this->deleteOptions, 'params', []),
             'deleteAjaxSettings' => ArrayHelper::getValue($this->deleteOptions, 'ajaxSettings', []),
             'deleteConfirm' => ArrayHelper::remove($this->deleteOptions, 'confirm', $deleteConfirmMsg),
-            'showErrorStack' => ArrayHelper::remove($this->deleteOptions, 'showErrorStack', false)
+            'showErrorStack' => ArrayHelper::remove($this->deleteOptions, 'showErrorStack', false),
+            'dialogLib' => ArrayHelper::getValue($this->krajeeDialogSettings, 'libName', 'krajeeDialog')
         ];
         $id = 'jQuery("#' . $this->container['id'] . '")';
         if ($this->enableEditMode) {
@@ -1095,6 +1113,9 @@ class DetailView extends \yii\widgets\DetailView
         if (!is_array($attribute)) {
             throw new InvalidConfigException('The attribute configuration must be an array.');
         }
+        foreach ($attribute as $prop => $setting) {
+            $attribute[$prop] = $this->parseAttributeProp($setting);
+        }
         if (isset($attribute['columns'])) {
             foreach ($attribute['columns'] as $j => $child) {
                 $attr = $this->parseAttributeItem($child);
@@ -1143,5 +1164,24 @@ class DetailView extends \yii\widgets\DetailView
             );
         }
         return $attribute;
+    }
+
+    /**
+     * Parses the attribute configuration and validates if a property is configured as a Closure callback. If so, the
+     * callback is executed and the attribute property is set to this callback output. The signature of the callback is
+     * `function($form, $widget)`, where:
+     * - `$form`: ActiveForm, is the current active form object in the detail view.
+     * - `$widget`: DetailView, is the current detail view widget instance.
+     *
+     * @param mixed $setting is the attribute property setting
+     *
+     * @return mixed the parsed attribute setting
+     */
+    protected function parseAttributeProp($setting)
+    {
+        /**
+         * @var Closure|mixed $setting
+         */
+        return $setting instanceof Closure ? $setting($this->_form, $this) : $setting;
     }
 }

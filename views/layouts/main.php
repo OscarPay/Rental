@@ -49,6 +49,9 @@ AppAsset::register($this);
             array_push($elementosNav, ['label' => 'Automóviles', 'url' => ['/car/index']]);
             array_push($elementosNav, ['label' => 'Rentas', 'url' => ['/rent/index-aprobados']]);
             array_push($elementosNav, ['label' => 'Vendedores', 'url' => ['/person/index-vendedores']]);
+            array_push($elementosNav, ['label' => 'Reporte de Ventas', 'url' => ['/sales-report/index']]);
+            array_push($elementosNav, ['label' => 'Top Vendedores', 'url' => ['/top-salers/index']]);
+            array_push($elementosNav, ['label' => 'Top Automóviles', 'url' => ['/top-cars/index']]);
         }
 
         if (Yii::$app->user->identity->tipo === Person::VENDEDOR) {

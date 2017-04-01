@@ -6,6 +6,7 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log', 'app\components\Bootstrap'],
+    'language'=>'es', // spanish
     'components' => [
         'formatter' => [
             'dateFormat' => 'dd/MMMM/yyyy',
@@ -27,6 +28,19 @@ $config = [
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
+        ],
+        'i18n' => [
+          'translations' => [
+            'app*' => [
+                'class' => 'yii\i18n\PhpMessageSource',
+                //'basePath' => '@app/messages',
+                //'sourceLanguage' => 'en-US',
+                'fileMap' => [
+                    'app' => 'app.php',
+                    'app/error' => 'error.php',
+                ],
+            ],
+          ],
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',

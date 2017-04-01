@@ -15,7 +15,7 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=5.4.0",
-        "yiisoft/yii2": ">=2.0.5",
+        "yiisoft/yii2": ">=2.0.9",
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*"
     },
@@ -25,11 +25,13 @@
         "yiisoft/yii2-gii": "*",
         "yiisoft/yii2-faker": "*",
         "kartik-v/yii2-grid": "*",
+        "kartik-v/yii2-date-range": "*",
         "kartik-v/yii2-widget-fileinput": "*",
         "kartik-v/yii2-detail-view": "*",
         "kartik-v/yii2-field-range": "*",
         "kartik-v/yii2-widget-activeform": "*",
-        "kartik-v/yii2-widgets":"*"
+        "kartik-v/yii2-widgets":"*",
+        "miloschuman/yii2-highcharts-widget": "*"
     },
     "config": {
         "process-timeout": 1800
